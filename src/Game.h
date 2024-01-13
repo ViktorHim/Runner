@@ -1,5 +1,4 @@
-#include "SDL2/SDL.h"
-#include "Vector2D.h"
+#include "Button.h"
 
 #ifndef GAME_H
 #define GAME_H
