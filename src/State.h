@@ -1,3 +1,5 @@
+#ifndef STATE_H
+#define STATE_H
 class State
 {
 public:
@@ -6,6 +8,7 @@ public:
         MENU,
         GAME,
         QUIT,
+        PAUSE
     };
 
     State();
@@ -15,6 +18,6 @@ public:
 private:
     States state;
 };
-
+#endif
 
 

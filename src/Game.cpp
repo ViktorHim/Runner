@@ -3,9 +3,25 @@
 
 Game::Game(Vector2D resolution)
 {
+
     // Инициализация SDL
     if (SDL_Init(SDL_INIT_EVERYTHING) < 0) {
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "SDL could not initialize! SDL_Error: %s\n", SDL_GetError());
+    }
+
+     if (TTF_Init() < 0)
+    {
+        std::cout << "TTF_Init() Error" << std::endl;
+    }
+
+    font = TTF_OpenFont("TimesNewRoman.ttf", 32);
+    if (font == NULL) {
+        printf("Failed to load font: %s\n", TTF_GetError());
+        std::cout << "TTF_OpenFont() Error: font is not open" << std::endl;
+    }
+
+    if (IMG_Init(IMG_INIT_PNG) < 0) {
+        // Обработка ошибки
     }
 
     // Создание окна
@@ -17,10 +33,15 @@ Game::Game(Vector2D resolution)
      // Создание рендерера
     renderer = SDL_CreateRenderer(window, -1, 0);
     if (!renderer) {
-        SDL_Log("SDL_CreateRenderer Error: %s", SDL_GetError());
+        std::cout <<"SDL_CreateRenderer Error" << std::endl;
         SDL_DestroyWindow(window);
         SDL_Quit();
     }
+
+    state.setState(State::MENU);
+    menu = new MenuWindow(renderer, &state, font);
+    game = new GameWindow(renderer, &state, font);
+
 }
 
 Game::~Game()
@@ -30,33 +51,26 @@ Game::~Game()
     SDL_Quit();
 }
 
-void Game::update() {
-    
-}
-
-void Game::render() {
-    SDL_SetRenderDrawColor(renderer, 239, 125, 20, 0);
-    SDL_Surface* surface = SDL_CreateRGBSurface(0, 100, 100, 32, 0, 0, 0, 0);
-    SDL_Texture* texture = SDL_CreateTextureFromSurface(renderer, surface);
-    // Добавьте здесь свой код для рендеринга объектов и других действий
-    SDL_Rect rect = {0, 0, 100, 100};
-    // Отображение на экране
-    SDL_RenderCopy(renderer, texture, NULL, &rect);
-    SDL_RenderPresent(renderer);
-    SDL_RenderClear(renderer);
-}
-
 void Game::start()
 {
-    SDL_Event event;
     while (!isEnd) {
-        // Обработка событий
-        // while (SDL_PollEvent(&event)) {
-        //     if (event.type == SDL_QUIT) {
-        //         isEnd = true;
-        //     }
-        // }
-        update();
-        render();
+        Uint32 currentTime = SDL_GetTicks();
+        switch (state.getState())
+        {
+            case State::MENU:
+            {
+                menu->update();
+                menu->render();
+            } break;
+            case State::GAME:
+            {
+                game->update(currentTime);
+                game->render();
+            } break;
+            case State::QUIT:
+            {
+                isEnd = true;
+            } break;
+        }
     }
 }

@@ -6,5 +6,6 @@ class Vector2D
         double x;
         double y;
         Vector2D(float x, float y);
+        Vector2D();
 };
 #endif

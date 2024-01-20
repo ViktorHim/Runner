@@ -12,7 +12,7 @@ all: build
 br: build run
 
 build: $(OBJS)
-	$(CC) $(OBJS) -o $(BUILD_DIR)app.exe -Llib -lSDL2 -lSDL2main
+	$(CC) $(OBJS) -o $(BUILD_DIR)app.exe -Llib -lSDL2 -lSDL2main -lSDL2_ttf -lSDL2_image
 
 $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 	$(CC) -c $< -o $@ -Iinclude
