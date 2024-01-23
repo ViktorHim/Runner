@@ -7,9 +7,7 @@ BUILD_DIR = ./build/
 SRCS = $(wildcard $(SRC_DIR)*.cpp)
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
-all: build
-
-br: build run
+all: build run
 
 build: $(OBJS)
 	$(CC) $(OBJS) -o $(BUILD_DIR)app.exe -Llib -lSDL2 -lSDL2main -lSDL2_ttf -lSDL2_image
@@ -20,7 +18,7 @@ $(OBJ_DIR)%.o: $(SRC_DIR)%.cpp
 run:
 	$(BUILD_DIR)app.exe
 clean:
-	del /Q $(OBJ_DIR)*
-	del /Q $(BUILD_DIR)*
+	del /Q .\obj\*.o
+	del /Q .\build\app.exe
 
 .PHONY: compile clean build
