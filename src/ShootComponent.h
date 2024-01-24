@@ -23,6 +23,7 @@ public:
     void shoot();
     void update();
     void updateCollision(Bullet * bullet);
+    bool isCollision(SDL_Rect rect);
     void render(int x, int y);
 };
 #endif

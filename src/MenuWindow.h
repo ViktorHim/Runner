@@ -2,7 +2,6 @@
 #define MENU_WINDOW_H
 #include "State.h"
 #include "Button.h"
-
 class MenuWindow
 {
 private:

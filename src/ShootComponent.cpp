@@ -60,6 +60,34 @@ void ShootComponent::updateCollision(Bullet *bullet)
     }
 }
 
+bool ShootComponent::isCollision(SDL_Rect rect)
+{
+    Bullet * bullet;
+    for(int i = 0; i < bullets.size(); i++)
+    {
+        bullet = bullets.front();
+        bullets.pop();
+        SDL_Rect bulletRect = bullet->getRect();
+        if(!bullet->isDestroied())
+        {
+            bool overlapX = (rect.x < bulletRect.x + bulletRect.w) && (rect.x + rect.w > bulletRect.x);
+
+            // Проверка по осям Y
+            bool overlapY = (rect.y < bulletRect.y + bulletRect.h) && (rect.y + rect.h > bulletRect.y);
+
+            // Если есть пересечение по обеим осям, прямоугольники пересекаются
+            if(overlapX && overlapY)
+            {
+                return true;
+            } 
+
+            bullets.push(bullet);
+        }
+    }
+
+    return false;
+}
+
 void ShootComponent::render(int x, int y)
 {
     Bullet * bullet;

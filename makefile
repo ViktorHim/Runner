@@ -4,7 +4,7 @@ SRC_DIR = ./src/
 OBJ_DIR = ./obj/
 BUILD_DIR = ./build/
 
-SRCS = $(wildcard $(SRC_DIR)*.cpp)
+SRCS = $(wildcard $(SRC_DIR)*.cpp) $(wildcard $(SRC_DIR)/**/*.cpp)
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
 all: build run
@@ -22,4 +22,4 @@ clean:
 	del /Q .\obj\*.o
 	del /Q .\build\app.exe
 
-.PHONY: compile clean build
+.PHONY: compile clean build 

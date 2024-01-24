@@ -29,8 +29,13 @@ Player::Player(SDL_Renderer *renderer, Vector2D position, Tilemap * map)
 
     shootComponent = new ShootComponent(renderer, &hitbox, &playerFlip);
     shootComponent->setMap(map);
+    healthComponent = new HealthComponent(1000, 5);
 }
 
+SDL_Rect *Player::getRect()
+{
+    return &rect;
+}
 
 void Player::initAnimation()
 {
@@ -127,6 +132,11 @@ void Player::render(int x, int y)
     SDL_RenderCopyEx(renderer, animationComponent->getCurrentFrame(), NULL, &cameraPos, 0, NULL, playerFlip);
 
     shootComponent->render(x, y);
+}
+
+Vector2D Player::getCenter()
+{
+    return Vector2D(hitbox.x, hitbox.y);
 }
 
 int Player::getPosX()

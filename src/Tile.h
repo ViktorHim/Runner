@@ -6,8 +6,6 @@
 #include "Vector2D.h"
 #include <iostream>
 
-
-
 class Tile
 {
 private:

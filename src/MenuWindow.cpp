@@ -33,7 +33,7 @@ void MenuWindow::update()
                 if (event.button.button != SDL_BUTTON_LEFT)
                     break;
                 if (playButton->isClicked())
-                    state->setState(State::GAME);
+                    state->setState(State::SELECT);
                 if (quitButton->isClicked())
                     state->setState(State::QUIT);
                 break;

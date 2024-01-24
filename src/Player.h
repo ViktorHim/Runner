@@ -17,17 +17,13 @@
 #include "ScreenSize.h"
 #include "ShootComponent.h"
 #include "AnimationComponent.h"
+#include "HealthComponent.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "Vector2D.h"
 #include "Tilemap.h"
 #include "Timer.h"
 #include <iostream>
-#include <vector>
-#include <map>
-
-
-
 class Player
 {
 public:
@@ -58,7 +54,6 @@ private:
 
     Timer * shootTimer;
 
-    ShootComponent * shootComponent;
     AnimationComponent * animationComponent;
     
     void initAnimation();
@@ -71,8 +66,13 @@ private:
     void flip(int dir);// Разворот текстурки взаисимости от направления движения
     void setAnimation(AnimationsState state); // переключение анимаций
 public:
+    HealthComponent * healthComponent;
+    ShootComponent * shootComponent;
+
     int getPosX();
     int getPosY();
+    Vector2D getCenter();
+    SDL_Rect * getRect();
     int getDir();
     void update(Uint32 currentTime);
     void updateHitbox();

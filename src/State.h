@@ -8,7 +8,7 @@ public:
         MENU,
         GAME,
         QUIT,
-        PAUSE
+        SELECT
     };
 
     State();

@@ -39,9 +39,9 @@ Game::Game(Vector2D resolution)
     }
 
     state.setState(State::MENU);
+    game = nullptr;
     menu = new MenuWindow(renderer, &state, font);
-    game = new GameWindow(renderer, &state, font);
-
+    select = new SelectWindow(renderer, &state, font);
 }
 
 Game::~Game()
@@ -59,11 +59,18 @@ void Game::start()
         {
             case State::MENU:
             {
+                game = nullptr;
                 menu->update();
                 menu->render();
             } break;
+            case State::SELECT:
+            {
+                select->update();
+                select->render();
+            } break;
             case State::GAME:
             {
+                if(game == nullptr) game = new GameWindow(renderer, &state, font, select->getLevel());
                 game->update(currentTime);
                 game->render();
             } break;
