@@ -1,39 +1,49 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 
-#define IDLE_FRAMES 4
-#define WALK_FRAMES 8
+
 
 #define PLAYER_SCALE 3
 #define PLAYER_SIZE 64
 
+#define IDLE 0
+#define WALK 1
+#define SIT 2
+
+#define IDLE_FRAMES 4
+#define WALK_FRAMES 8
+#define SIT_FRAMES 1
+
 #include "ScreenSize.h"
+#include "ShootComponent.h"
+#include "AnimationComponent.h"
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "Vector2D.h"
 #include "Tilemap.h"
+#include "Timer.h"
 #include <iostream>
 #include <vector>
 #include <map>
+
+
+
 class Player
 {
 public:
     enum AnimationsState
     {
-        IDLE,
-        WALK,
-        SIT
+        KEK
+        // IDLE,
+        // WALK,
+        // SIT
     };
 private:
     Tilemap * map;
-    std::map<AnimationsState, std::vector<SDL_Texture*>> animations;
     SDL_Rect rect;
     SDL_Rect hitbox;
     SDL_Renderer * renderer;
     SDL_RendererFlip playerFlip;
-    AnimationsState currentAnimationState;
-    std::vector<SDL_Texture*> * currentAnimation;
-    int currentFrame;
     bool isJump;
     bool onGround;
     bool isSit;
@@ -46,8 +56,10 @@ private:
     double jumpSpeed;
     double startHeight;
 
-    Uint32 lastFrameSwitchTime;
-    Uint32 frameSwitchDelay;
+    Timer * shootTimer;
+
+    ShootComponent * shootComponent;
+    AnimationComponent * animationComponent;
     
     void initAnimation();
     bool inMapBounce(int x);
@@ -61,6 +73,7 @@ private:
 public:
     int getPosX();
     int getPosY();
+    int getDir();
     void update(Uint32 currentTime);
     void updateHitbox();
     void render(int x, int y);

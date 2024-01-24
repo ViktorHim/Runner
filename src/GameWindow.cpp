@@ -63,29 +63,29 @@ void GameWindow::updateCamera()
 
 void GameWindow::updateKeyboardInput(SDL_Event * event)
 {
-    if (event->type == SDL_KEYDOWN) 
-    {
-        switch (event->key.keysym.sym)
-        {
-            case SDLK_LEFT:
-                    player->moveX(-10);
-                    player->setAnimation(Player::AnimationsState::WALK);
-                    player->flip(-1);
-                break;
-            case SDLK_RIGHT:
-                    player->moveX(10);
-                    player->setAnimation(Player::AnimationsState::WALK);
-                    player->flip(1);
-                break;
-            case SDLK_SPACE:
-                    player->jump();
-                break;
-        }
-    }
-    else if(event->type == SDL_KEYUP)
-    {
-         player->setAnimation(Player::AnimationsState::IDLE);
-    }
+    // if (event->type == SDL_KEYDOWN) 
+    // {
+    //     switch (event->key.keysym.sym)
+    //     {
+    //         case SDLK_LEFT:
+    //                 player->moveX(-10);
+    //                 player->setAnimation(Player::AnimationsState::WALK);
+    //                 player->flip(-1);
+    //             break;
+    //         case SDLK_RIGHT:
+    //                 player->moveX(10);
+    //                 player->setAnimation(Player::AnimationsState::WALK);
+    //                 player->flip(1);
+    //             break;
+    //         case SDLK_SPACE:
+    //                 player->jump();
+    //             break;
+    //     }
+    // }
+    // else if(event->type == SDL_KEYUP)
+    // {
+    //      player->setAnimation(Player::AnimationsState::IDLE);
+    // }
 }
 
 void GameWindow::render()

@@ -5,13 +5,9 @@ Player::Player(SDL_Renderer *renderer, Vector2D position, Tilemap * map)
     this->map = map;
 
     playerFlip = SDL_FLIP_NONE;
-    currentAnimationState = IDLE;
-    currentFrame = 0;
-    lastFrameSwitchTime = 0;
-    frameSwitchDelay = 100;
+    shootTimer = new Timer(250);
 
     initAnimation();
-    currentAnimation = &animations[IDLE];
 
     rect.h = PLAYER_SIZE * PLAYER_SCALE;
     rect.w = PLAYER_SIZE * (PLAYER_SCALE);
@@ -30,44 +26,19 @@ Player::Player(SDL_Renderer *renderer, Vector2D position, Tilemap * map)
     onGround = true;
     isJump = false;
     isSit = false;
+
+    shootComponent = new ShootComponent(renderer, &hitbox, &playerFlip);
+    shootComponent->setMap(map);
 }
 
 
 void Player::initAnimation()
 {
-    for(int i = 0; i < IDLE_FRAMES; i++)
-    {
-        char filename[30];
-        sprintf(filename, "sprites/idle/%d.png", i + 1);
-        SDL_Surface* surface = IMG_Load(filename);
+    animationComponent = new AnimationComponent(renderer);
 
-        if (!surface) {
-            std::cout << filename << " error" << std::endl;
-        }
-
-        animations[IDLE].push_back(SDL_CreateTextureFromSurface(renderer, surface));
-        SDL_FreeSurface(surface);
-    }
-
-     for(int i = 0; i < WALK_FRAMES; i++)
-    {
-        char filename[30];
-        sprintf(filename, "sprites/walk/%d.png", i + 1);
-        SDL_Surface* surface = IMG_Load(filename);
-
-        if (!surface) {
-            std::cout << filename << " error" << std::endl;
-        }
-
-        animations[WALK].push_back(SDL_CreateTextureFromSurface(renderer, surface));
-        SDL_FreeSurface(surface);
-    }
-
-    SDL_Surface * surface = IMG_Load("sprites/sit/1.png");
-    if (!surface) {
-        std::cout << "sprites/sit/1.png" << " error" << std::endl;
-    }
-    animations[SIT].push_back(SDL_CreateTextureFromSurface(renderer, surface));
+    animationComponent->addAnimation(IDLE, IDLE_FRAMES, "sprites/idle/");
+    animationComponent->addAnimation(WALK, WALK_FRAMES, "sprites/walk/");
+    animationComponent->addAnimation(SIT, SIT_FRAMES, "sprites/sit/");
 }
 
 void Player::flip(int dir)
@@ -82,59 +53,50 @@ void Player::flip(int dir)
     }
 }
 
-void Player::setAnimation(AnimationsState state)
-{
-    if(currentAnimationState != state)
-    {
-        currentAnimationState = state;
-        currentAnimation = &animations[state];
-        currentFrame = 0;
-    }
-
-}
-
 void Player::update(Uint32 currentTime)
 {
-    if (currentTime - lastFrameSwitchTime >= frameSwitchDelay)
-        {
-            lastFrameSwitchTime = currentTime;
-            currentFrame = (currentFrame + 1) % animations[currentAnimationState].size();
-        }
-
     const Uint8* state = SDL_GetKeyboardState(NULL);
     if(!isSit)
     {
         if(state[SDL_SCANCODE_LEFT])
         {
             moveX(-10);
-            setAnimation(AnimationsState::WALK);
+            animationComponent->setAnimation(WALK);
             flip(-1);
         }
         if (state[SDL_SCANCODE_RIGHT])
         {
             moveX(10);
-            setAnimation(AnimationsState::WALK);
+            animationComponent->setAnimation(WALK);
             flip(1);
         }
         if(!state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_LSHIFT])
         {
-            setAnimation(AnimationsState::IDLE);
+            animationComponent->setAnimation(IDLE);
         }
         if(state[SDL_SCANCODE_SPACE])
         {
             jump();
         }
+        if(state[SDL_SCANCODE_F])
+        {
+            if(shootTimer->shouldTrigger())
+            {
+                shootComponent->shoot();
+            }
+        }
     }
     if(state[SDL_SCANCODE_LSHIFT] && onGround)
     {
         isSit = true;
-        setAnimation(AnimationsState::SIT);
+        animationComponent->setAnimation(SIT);
     }
     else
     {
         isSit = false;
     }
 
+    shootComponent->update();
     applyGravity();
     updateHitbox();
 }
@@ -156,20 +118,21 @@ void Player::updateHitbox()
 }
 
 void Player::render(int x, int y)
-{    
+{
+
     SDL_Rect cameraPos = {rect.x - x, rect.y - y, rect.w, rect.h};
     SDL_Rect hitboxRect = {hitbox.x- x, hitbox.y - y, hitbox.w, hitbox.h};
     SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
     SDL_RenderDrawRect(renderer, &hitboxRect);
-    SDL_RenderCopyEx(renderer, currentAnimation->at(currentFrame), NULL, &cameraPos, 0, NULL, playerFlip);
+    SDL_RenderCopyEx(renderer, animationComponent->getCurrentFrame(), NULL, &cameraPos, 0, NULL, playerFlip);
+
+    shootComponent->render(x, y);
 }
 
 int Player::getPosX()
 {
     return rect.x;
 }
-
-
 
 int Player::getPosY()
 {
@@ -193,7 +156,6 @@ void Player::applyGravity()
     }
     else
     {
-        
         fallSpeed = std::min(fallSpeed + gravity * 2, maxFallSpeed);
 
         int newY = hitbox.y + (int)fallSpeed;
@@ -238,7 +200,6 @@ bool Player::inMapBounce(int x)
 
 bool Player::checkCollision(int x, int y)
 {
-
     int tileX = x / TILE_SIZE;
     int tileY = y / TILE_SIZE;
 
@@ -258,5 +219,3 @@ bool Player::checkCollision(int x, int y)
 
     return false;
 }
-
-

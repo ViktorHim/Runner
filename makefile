@@ -8,6 +8,7 @@ SRCS = $(wildcard $(SRC_DIR)*.cpp)
 OBJS = $(patsubst $(SRC_DIR)%.cpp, $(OBJ_DIR)%.o, $(SRCS))
 
 all: build run
+reset: clean build run
 
 build: $(OBJS)
 	$(CC) $(OBJS) -o $(BUILD_DIR)app.exe -Llib -lSDL2 -lSDL2main -lSDL2_ttf -lSDL2_image
