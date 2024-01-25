@@ -51,7 +51,7 @@ void ShootComponent::updateCollision(Bullet *bullet)
     {
         for (int col = tileX; col <= tileRight; ++col)
         {
-            if(!map->isEmpty(row, col))
+            if(row < map->getSize().y && col < map->getSize().x && !map->isEmpty(row, col))
             {
                 bullet->destroy();
                 return;

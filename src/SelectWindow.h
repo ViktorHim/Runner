@@ -9,7 +9,9 @@ private:
     SDL_Renderer* renderer;
     State * state;
     TTF_Font *font;
-    Button* levelButtons[3];
+
+    Button* levelButtons[3]; // массив кнопок уровней
+
     int level;
 public:
     SelectWindow(SDL_Renderer * renderer, State * state, TTF_Font *font);

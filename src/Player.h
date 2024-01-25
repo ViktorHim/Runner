@@ -24,6 +24,7 @@
 #include "Tilemap.h"
 #include "Timer.h"
 #include <iostream>
+
 class Player
 {
 public:
@@ -35,16 +36,17 @@ public:
         // SIT
     };
 private:
-    Tilemap * map;
-    SDL_Rect rect;
-    SDL_Rect hitbox;
-    SDL_Renderer * renderer;
-    SDL_RendererFlip playerFlip;
-    bool isJump;
+    Tilemap * map;  //указатель на карту
+    SDL_Rect rect; // прямоугольник с текстурой
+    SDL_Rect hitbox; // хитбокс
+    SDL_Renderer * renderer; // рендер
+    SDL_RendererFlip playerFlip; // поворот игрока
+
+    bool isJump; // в прыжке
     bool onGround;
     bool isSit;
 
-    double fallSpeed;
+    double fallSpeed; // скорость падения
     double gravity;
     double maxFallSpeed;
 

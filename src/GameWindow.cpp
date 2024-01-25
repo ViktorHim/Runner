@@ -8,7 +8,7 @@ GameWindow::GameWindow(SDL_Renderer *renderer, State *state, TTF_Font *font, int
 
     camera = {0, 0, WIDTH, HEIGHT};
 
-    switch (level)
+    switch (level)// загрузка уровня
     {
         case 1:tilemap = new Tilemap(renderer);
         break;
@@ -21,6 +21,7 @@ GameWindow::GameWindow(SDL_Renderer *renderer, State *state, TTF_Font *font, int
     player = new Player(renderer, Vector2D(50, 320), tilemap);
     enemyComponent = new EnemyComponent(renderer, player);
     panel = new UIPanel(renderer, font, 1);
+    endWindow = new EndWindow(renderer, state, font);
 
     SDL_Surface * surface = IMG_Load("sprites/BG.png");
     background = SDL_CreateTextureFromSurface(renderer, surface);
@@ -33,41 +34,50 @@ GameWindow::GameWindow(SDL_Renderer *renderer, State *state, TTF_Font *font, int
 
     SDL_Rect backRect = {0, 50, 200, 40};
     backRect.x = WIDTH  - backRect.w - 50;
-    backButton = new Button(renderer, backRect, font, "Back");
+    backButton = new Button(renderer, backRect, font, "Назад");
 }
 
 void GameWindow::update(Uint32 currentTime)
 {
-    if(!player->healthComponent->isAlive()) state->setState(State::MENU);
-    if(player->getPosX() > finishX) state->setState(State::MENU);
-
-    SDL_Delay(25);
-    updateCamera();
-
-    player->update(currentTime);
-    enemyComponent->update();
-    panel->update(enemyComponent->getscore(),
-    player->healthComponent->getHealth());
-
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) // обработка событий
+    if(!player->healthComponent->isAlive() || player->getPosY() > 750)
     {
-        switch (event.type)
+        endWindow->update(enemyComponent->getscore(), false);
+    }
+    else if(player->getPosX() > finishX)
+    {
+        endWindow->update(enemyComponent->getscore(), true);
+    }
+    else
+    {
+        SDL_Delay(25);//задержка между обновлениями
+        updateCamera();//обновление камеры
+
+        player->update(currentTime);//обновление компонентов игры
+        enemyComponent->update();
+        panel->update(enemyComponent->getscore(),
+        player->healthComponent->getHealth());
+
+        SDL_Event event;
+        while (SDL_PollEvent(&event)) // обработка событий
         {
-            case SDL_MOUSEBUTTONUP:
-                if (event.button.button != SDL_BUTTON_LEFT)
+            switch (event.type)
+            {
+                case SDL_MOUSEBUTTONUP:
+                    if (event.button.button != SDL_BUTTON_LEFT)
+                        break;
+                    if (backButton->isClicked())
+                        state->setState(State::MENU);
                     break;
-                if (backButton->isClicked())
-                    state->setState(State::MENU);
-                break;
-            case SDL_QUIT:
-                state->setState(State::QUIT);
-                break;
+                case SDL_QUIT:
+                    state->setState(State::QUIT);
+                    break;
+            }
         }
     }
+
 }
 
-void GameWindow::updateCamera()
+void GameWindow::updateCamera() // обновление
 {
     camera.x = ( player->getPosX() + PLAYER_SIZE * PLAYER_SCALE / 2) - WIDTH / 2;
 
@@ -86,16 +96,28 @@ void GameWindow::render()
 {
     SDL_RenderClear(renderer);
 
-    SDL_RenderCopy(renderer, background, NULL, NULL);
+    if(!player->healthComponent->isAlive() || player->getPosY() > 750)
+    {
+        endWindow->render();
+    }
+    else if(player->getPosX() > finishX)
+    {
+        endWindow->render();
+    }
+    else
+    {
+        SDL_RenderCopy(renderer, background, NULL, NULL);
 
-    SDL_Rect finishCamera = {finishRect.x - camera.x, finishRect.y - camera.y, finishRect.w, finishRect.h};
-    SDL_RenderCopy(renderer, finishLine, NULL, &finishCamera);
+        SDL_Rect finishCamera = {finishRect.x - camera.x, finishRect.y - camera.y, finishRect.w, finishRect.h};
+        SDL_RenderCopy(renderer, finishLine, NULL, &finishCamera);
 
-    panel->render();
-    tilemap->render(camera.x, camera.y);
-    backButton->render();
-    player->render(camera.x, camera.y);
-    enemyComponent->render(camera.x, camera.y);
+        panel->render();
+        tilemap->render(camera.x, camera.y);
+        backButton->render();
+        player->render(camera.x, camera.y);
+        enemyComponent->render(camera.x, camera.y);
+    }
+
 
     SDL_RenderPresent(renderer);
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);

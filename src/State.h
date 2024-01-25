@@ -3,12 +3,13 @@
 class State
 {
 public:
-    enum States
+    enum States //перечисление состояний
     {
         MENU,
         GAME,
         QUIT,
-        SELECT
+        SELECT,
+        RESTART
     };
 
     State();
@@ -19,5 +20,3 @@ private:
     States state;
 };
 #endif
-
-

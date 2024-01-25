@@ -8,8 +8,9 @@ private:
     SDL_Renderer* renderer;
     State * state;
     TTF_Font *font;
-    Button* playButton;
-    Button* quitButton;
+
+    Button* playButton;//играть
+    Button* quitButton;//выход
 public:
     void update();
     void render();

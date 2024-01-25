@@ -14,7 +14,7 @@ Game::Game(Vector2D resolution)
         std::cout << "TTF_Init() Error" << std::endl;
     }
 
-    font = TTF_OpenFont("TimesNewRoman.ttf", 32);
+    font = TTF_OpenFont("pixelcyr_normal.ttf", 32);
     if (font == NULL) {
         printf("Failed to load font: %s\n", TTF_GetError());
         std::cout << "TTF_OpenFont() Error: font is not open" << std::endl;
@@ -53,11 +53,12 @@ Game::~Game()
 
 void Game::start()
 {
-    while (!isEnd) {
+
+    while (!isEnd) { // главный цикл игры
         Uint32 currentTime = SDL_GetTicks();
-        switch (state.getState())
+        switch (state.getState())// Проверка состояния игры
         {
-            case State::MENU:
+            case State::MENU: 
             {
                 game = nullptr;
                 menu->update();
@@ -73,6 +74,14 @@ void Game::start()
                 if(game == nullptr) game = new GameWindow(renderer, &state, font, select->getLevel());
                 game->update(currentTime);
                 game->render();
+            } break;
+            case State::RESTART:
+            {
+                game = nullptr;
+                state.setState(State::GAME);
+                // if(game == nullptr) game = new GameWindow(renderer, &state, font, select->getLevel());
+                // game->update(currentTime);
+                // game->render();
             } break;
             case State::QUIT:
             {

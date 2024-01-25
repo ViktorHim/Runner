@@ -20,7 +20,7 @@ Button::Button(SDL_Renderer *renderer, SDL_Rect rect, TTF_Font *font, std::strin
     this->font = font;
     this->text = text;
 
-    SDL_Surface *textSurface = TTF_RenderText_Solid(font, text.c_str(), {255, 255, 255, 0});
+    SDL_Surface *textSurface = TTF_RenderUTF8_Blended(font, text.c_str(), {255, 255, 255, 0});
     textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
 
     textRect.h = textSurface->h;

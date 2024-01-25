@@ -11,24 +11,28 @@
 #include "MenuWindow.h"
 #include "SelectWindow.h"
 
-//Рекорды
-//Минибосс
-//Враги
 //Экран завершения
+
+//Враги
+
+//Минибосс
+
+//Рекорды
+
 //Подпись
 
 class Game
 {
 private:
-    bool isEnd;
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    State state;
-    TTF_Font *font;
+    bool isEnd; // флаг окончания игры
+    SDL_Window* window; // окно игры
+    SDL_Renderer* renderer; // рендер
+    State state; // Состояние игры
+    TTF_Font *font; // шрифт для текста
 
-    GameWindow* game;
-    SelectWindow* select;
-    MenuWindow* menu;
+    GameWindow* game; // окно с геймплеем
+    SelectWindow* select;// окно выбора уровня
+    MenuWindow* menu; // окно меню
 public:
     void start();
     Game(Vector2D resolution);

@@ -5,7 +5,7 @@ class Timer
 {
 private:
     Uint32 lastResetTime;
-    int delay;
+    int delay;//задержка
 
 public:
     Timer(int delay);

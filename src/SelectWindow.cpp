@@ -5,25 +5,26 @@ SelectWindow::SelectWindow(SDL_Renderer *renderer, State *state, TTF_Font *font)
     this->font = font;
     this->renderer = renderer;
     this->state = state;
+
     level =0;
 
     SDL_Rect first = {0, 250, 200, 70};
     first.x = WIDTH / 2 - first.w * 2;
-    levelButtons[0] = new Button(renderer, first, font, "Level 1");
+    levelButtons[0] = new Button(renderer, first, font, "Уровень 1");
 
     SDL_Rect second = {0, 250, 200, 70};
     second.x = WIDTH / 2 - second.w / 2;
-    levelButtons[1] = new Button(renderer, second, font, "Level 2");
+    levelButtons[1] = new Button(renderer, second, font, "Уровень 2");
 
     SDL_Rect third = {0, 250, 200, 70};
     third.x = WIDTH / 2 + third.w;
-    levelButtons[2] = new Button(renderer, third, font, "Level 3");
+    levelButtons[2] = new Button(renderer, third, font, "Уровень 3");
 }
 
 void SelectWindow::update()
 {
     SDL_Event event;
-    while (SDL_PollEvent(&event))
+    while (SDL_PollEvent(&event))// обработка событий
     {
         switch (event.type)
         {

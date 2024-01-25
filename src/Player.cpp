@@ -61,21 +61,22 @@ void Player::flip(int dir)
 void Player::update(Uint32 currentTime)
 {
     const Uint8* state = SDL_GetKeyboardState(NULL);
+    Uint32 buttonState = SDL_GetMouseState(NULL, NULL);
     if(!isSit)
     {
-        if(state[SDL_SCANCODE_LEFT])
+        if(state[SDL_SCANCODE_A])
         {
             moveX(-10);
             animationComponent->setAnimation(WALK);
             flip(-1);
         }
-        if (state[SDL_SCANCODE_RIGHT])
+        if (state[SDL_SCANCODE_D])
         {
             moveX(10);
             animationComponent->setAnimation(WALK);
             flip(1);
         }
-        if(!state[SDL_SCANCODE_RIGHT] && !state[SDL_SCANCODE_LEFT] && !state[SDL_SCANCODE_LSHIFT])
+        if(!state[SDL_SCANCODE_D] && !state[SDL_SCANCODE_A] && !state[SDL_SCANCODE_LSHIFT] && !state[SDL_SCANCODE_S])
         {
             animationComponent->setAnimation(IDLE);
         }
@@ -83,15 +84,22 @@ void Player::update(Uint32 currentTime)
         {
             jump();
         }
-        if(state[SDL_SCANCODE_F])
+    }
+    if (buttonState & SDL_BUTTON(SDL_BUTTON_LEFT)) 
+    {
+        if(shootTimer->shouldTrigger())
         {
-            if(shootTimer->shouldTrigger())
-            {
-                shootComponent->shoot();
-            }
+           shootComponent->shoot();
         }
     }
-    if(state[SDL_SCANCODE_LSHIFT] && onGround)
+    // if(state[SDL_SCANCODE_F])
+    // {
+    //     if(shootTimer->shouldTrigger())
+    //     {
+    //         shootComponent->shoot();
+    //     }
+    // }
+    if((state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_S] ) && onGround)
     {
         isSit = true;
         animationComponent->setAnimation(SIT);
@@ -220,7 +228,7 @@ bool Player::checkCollision(int x, int y)
     {
         for (int col = tileX; col <= tileRight; ++col)
         {
-            if(!map->isEmpty(row, col))
+            if(row < map->getSize().y && col < map->getSize().x && !map->isEmpty(row, col))
             {
                 return true;
             }

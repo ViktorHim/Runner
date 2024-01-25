@@ -1,5 +1,6 @@
 #ifndef GAME_WINDOW_H
 #define GAME_WINDOW_H
+#include "EndWindow.h"
 #include "State.h"
 #include "EnemyComponent.h"
 #include "UIPanel.h"
@@ -22,7 +23,9 @@ private:
     SDL_Texture * finishLine;// финишная черта
     SDL_Rect finishRect;
     int finishX;
-
+    
+    EndWindow * endWindow; // окно завершения игры
+    
     Button* backButton; // кнопка выхода в меню
     UIPanel * panel; // левая панель с информацией
     Player * player; // Игрок

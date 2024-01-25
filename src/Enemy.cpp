@@ -18,7 +18,6 @@ Enemy::Enemy(SDL_Renderer *renderer, Vector2D position, Player *target)
     damage = 1;
     state = NONE;
 
-
     hitboxComponent = new HitboxComponent(renderer, &rect, 0 , 0);
     healthComponent = new HealthComponent(0, 5);
     initAnimation();
