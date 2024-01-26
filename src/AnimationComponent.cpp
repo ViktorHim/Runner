@@ -35,6 +35,11 @@ void AnimationComponent::setAnimation(int key)
     }
 }
 
+void AnimationComponent::setDelay(int delay)
+{
+    switchFrames = new Timer(delay);
+}
+
 SDL_Texture *AnimationComponent::getCurrentFrame()
 {
     if (switchFrames->shouldTrigger())

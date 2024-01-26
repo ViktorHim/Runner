@@ -17,10 +17,11 @@ private:
     SDL_Rect * fireOrigin;
     SDL_RendererFlip * flip;
     Tilemap * map;
+    Bullet::BulletType type;
 public:
-    ShootComponent(SDL_Renderer * renderer, SDL_Rect * fireOrigin, SDL_RendererFlip * flip);
+    ShootComponent(SDL_Renderer * renderer, SDL_Rect * fireOrigin, SDL_RendererFlip * flip, Bullet::BulletType type);
     void setMap(Tilemap * map);
-    void shoot();
+    void shoot(int offsetX, int offsetY);
     void update();
     void updateCollision(Bullet * bullet);
     bool isCollision(SDL_Rect rect);

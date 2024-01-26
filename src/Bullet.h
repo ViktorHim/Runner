@@ -6,13 +6,19 @@
 #include "Vector2D.h"
 #include "Timer.h"
 
-#define EMEMY_BULLET "sprites/bullets/red.png"
+#define ENEMY_BULLET "sprites/bullets/red.png"
 #define PLAYER_BULLET "sprites/bullets/blue.png"
 #define DEFAULT_VELOCITY 30
 #define BULLET_SCALE 1
 
 class Bullet
 {
+public:
+    enum BulletType
+    {
+        ENEMY,
+        PLAYER
+    };
 private:
     SDL_Renderer * renderer;
     SDL_Texture * texture;
@@ -28,7 +34,7 @@ public:
     bool isDestroied();
     void render(int x, int y);
     SDL_Rect getRect();
-    Bullet(SDL_Renderer * renderer, Vector2D pos, SDL_RendererFlip flip);
+    Bullet(SDL_Renderer * renderer, Vector2D pos, SDL_RendererFlip flip, BulletType type);
 };
 
 #endif

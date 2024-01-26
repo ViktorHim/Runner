@@ -75,6 +75,7 @@ public:
     int getPosY();
     Vector2D getCenter();
     SDL_Rect * getRect();
+    SDL_Rect getHitbox();
     int getDir();
     void update(Uint32 currentTime);
     void updateHitbox();

@@ -6,7 +6,6 @@
 #include "UIPanel.h"
 #include "Button.h"
 #include "Player.h"
-#include "Enemy.h"
 #include "Tilemap.h"
 #include "ScreenSize.h"
 #include <string>

@@ -19,7 +19,7 @@ GameWindow::GameWindow(SDL_Renderer *renderer, State *state, TTF_Font *font, int
     }
     
     player = new Player(renderer, Vector2D(50, 320), tilemap);
-    enemyComponent = new EnemyComponent(renderer, player);
+    enemyComponent = new EnemyComponent(renderer, player, tilemap, level);
     panel = new UIPanel(renderer, font, 1);
     endWindow = new EndWindow(renderer, state, font);
 

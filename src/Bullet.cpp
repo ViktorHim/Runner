@@ -1,6 +1,6 @@
 #include "Bullet.h"
 
-Bullet::Bullet(SDL_Renderer * renderer, Vector2D pos, SDL_RendererFlip flip)
+Bullet::Bullet(SDL_Renderer * renderer, Vector2D pos, SDL_RendererFlip flip, BulletType type)
 {
     this->renderer = renderer;
     if(flip == SDL_FLIP_NONE)
@@ -13,7 +13,15 @@ Bullet::Bullet(SDL_Renderer * renderer, Vector2D pos, SDL_RendererFlip flip)
     }
     bulletFlip = flip;
 
-    SDL_Surface * surface = IMG_Load(PLAYER_BULLET);
+    SDL_Surface * surface;
+    if(type == PLAYER)
+    {
+        surface = IMG_Load(PLAYER_BULLET);
+    }
+    else
+    {
+        surface = IMG_Load(ENEMY_BULLET);
+    }
 
     rect.x = pos.x;
     rect.y = pos.y;

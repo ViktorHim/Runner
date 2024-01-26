@@ -1,7 +1,8 @@
 #include "ShootComponent.h"
 
-ShootComponent::ShootComponent(SDL_Renderer * renderer, SDL_Rect *fireOrigin, SDL_RendererFlip *flip)
+ShootComponent::ShootComponent(SDL_Renderer * renderer, SDL_Rect * fireOrigin, SDL_RendererFlip * flip, Bullet::BulletType type)
 {
+    this->type = type;
     this->renderer = renderer;
     this->fireOrigin = fireOrigin;
     this->flip = flip;
@@ -12,9 +13,10 @@ void ShootComponent::setMap(Tilemap *map)
     this->map = map;
 }
 
-void ShootComponent::shoot()
+void ShootComponent::shoot(int offsetX, int offsetY)
 {
-    bullets.push(new Bullet(renderer, Vector2D(fireOrigin->x, fireOrigin->y), *flip));
+    bullets.push(new Bullet(renderer, Vector2D(fireOrigin->x + fireOrigin->w / 2 + offsetX,
+                                            fireOrigin->y + fireOrigin->h / 2 + offsetY), *flip, type));
 }
 
 void ShootComponent::update()

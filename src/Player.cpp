@@ -15,7 +15,7 @@ Player::Player(SDL_Renderer *renderer, Vector2D position, Tilemap * map)
     rect.y = position.y;
 
     hitbox.h = PLAYER_SIZE * (PLAYER_SCALE-1);
-    hitbox.w = PLAYER_SIZE * (PLAYER_SCALE - 1);
+    hitbox.w = PLAYER_SIZE * (PLAYER_SCALE - 1.5);
     hitbox.x = rect.x + (rect.w - hitbox.w) / 2;
     hitbox.y = rect.y + (rect.h - hitbox.h) / 2 + 35;
 
@@ -27,14 +27,19 @@ Player::Player(SDL_Renderer *renderer, Vector2D position, Tilemap * map)
     isJump = false;
     isSit = false;
 
-    shootComponent = new ShootComponent(renderer, &hitbox, &playerFlip);
+    shootComponent = new ShootComponent(renderer, &hitbox, &playerFlip, Bullet::BulletType::PLAYER);
     shootComponent->setMap(map);
-    healthComponent = new HealthComponent(1000, 5);
+    healthComponent = new HealthComponent(500, 10);
 }
 
 SDL_Rect *Player::getRect()
 {
     return &rect;
+}
+
+SDL_Rect Player::getHitbox()
+{
+    return hitbox;
 }
 
 void Player::initAnimation()
@@ -89,7 +94,7 @@ void Player::update(Uint32 currentTime)
     {
         if(shootTimer->shouldTrigger())
         {
-           shootComponent->shoot();
+           shootComponent->shoot(0, -10);
         }
     }
     // if(state[SDL_SCANCODE_F])

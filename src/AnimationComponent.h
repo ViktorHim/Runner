@@ -19,6 +19,7 @@ public:
     AnimationComponent(SDL_Renderer * renderer);
     void addAnimation(int key, int frames, std::string path);
     void setAnimation(int key);
+    void setDelay(int delay);
     SDL_Texture* getCurrentFrame();
     ~AnimationComponent();
 };
